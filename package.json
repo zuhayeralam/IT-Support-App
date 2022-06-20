@@ -1,0 +1,29 @@
+{
+  "name": "it-support-app",
+  "version": "1.0.0",
+  "description": "IT Support App with React Context",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuhayeralam/IT-Support-App.git"
+  },
+  "keywords": [
+    "Context",
+    "React",
+    "Full",
+    "Stack",
+    "IT",
+    "Support",
+    "App"
+  ],
+  "author": "Zuhayer Alam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zuhayeralam/IT-Support-App/issues"
+  },
+  "homepage": "https://github.com/zuhayeralam/IT-Support-App#readme"
+}
