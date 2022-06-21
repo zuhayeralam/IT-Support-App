@@ -1,5 +1,9 @@
 import { DISPLAY_ALERT, CLEAR_ALERT } from '../constants/alertConstants';
-
+import {
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_FAIL,
+} from '../constants/registerConstants';
 const reducer = (state, action) => {
   if (action.type === DISPLAY_ALERT) {
     return {
@@ -16,6 +20,34 @@ const reducer = (state, action) => {
       showAlert: false,
       alertType: '',
       alertText: '',
+    };
+  }
+
+  if (action.type === REGISTER_USER_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === REGISTER_USER_SUCCESS) {
+    return {
+      ...state,
+      isLoading: true,
+      token: action.payload.token,
+      user: action.payload.user,
+      userLocation: action.payload.location,
+      issueLocation: action.payload.location,
+      showAlert: true,
+      alertType: 'success',
+      alertText: action.payload.alertText,
+    };
+  }
+
+  if (action.type === REGISTER_USER_FAIL) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
     };
   }
 
