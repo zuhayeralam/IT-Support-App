@@ -7,13 +7,21 @@ import AllIssues from './pages/AllIssues';
 import Profile from './pages/Profile';
 import Landing from './pages/Landing';
 import Error from './pages/Error';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<SharedLayout />}>
+          <Route
+            path='/'
+            element={
+              <ProtectedRoute>
+                <SharedLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Stats />} />
             <Route path='all-issues' element={<AllIssues />}></Route>
             <Route path='add-issue' element={<AddIssue />}></Route>
