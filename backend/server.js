@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import 'express-async-errors';
 import connectDB from './db/connect.js';
 import authRouter from './routes/authRoutes.js';
 import issuesRouter from './routes/issueRoutes.js';
