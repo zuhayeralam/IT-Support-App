@@ -9,6 +9,12 @@ import {
   REGISTER_USER_FAIL,
 } from '../constants/registerConstants';
 
+import {
+  LOGIN_USER_REQUEST,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL,
+} from '../constants/loginConstants';
+
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
 const userLocation = localStorage.getItem('location');
@@ -44,6 +50,8 @@ const AppProvider = ({ children }) => {
     }, 3000);
   };
 
+  // local storage for login and register
+
   const addUserToLocalStorage = ({ user, token, location }) => {
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', token);
@@ -55,6 +63,8 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem('user');
     localStorage.removeItem('location');
   };
+
+  // login and register
 
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_REQUEST });
@@ -76,12 +86,34 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const loginUser = async (currentUser) => {
+    dispatch({ type: LOGIN_USER_REQUEST });
+    try {
+      const { data } = await axios.post('/api/v1/auth/login', currentUser);
+      const { user, token, location } = data;
+
+      dispatch({
+        type: LOGIN_USER_SUCCESS,
+        payload: { user, token, location },
+      });
+
+      addUserToLocalStorage({ user, token, location });
+    } catch (error) {
+      dispatch({
+        type: LOGIN_USER_FAIL,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
         ...state,
         displayAlert,
         registerUser,
+        loginUser,
       }}
     >
       {children}
