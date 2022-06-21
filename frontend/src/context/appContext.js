@@ -15,6 +15,9 @@ import {
   LOGIN_USER_FAIL,
 } from '../constants/loginConstants';
 
+import { TOGGLE_SIDEBAR } from '../constants/sidebarConstants';
+import { LOGOUT_USER } from '../constants/loginConstants';
+
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
 const userLocation = localStorage.getItem('location');
@@ -28,6 +31,7 @@ export const initialState = {
   token: token,
   userLocation: userLocation || '',
   issueLocation: userLocation || '',
+  showSidebar: false,
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -107,6 +111,15 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const logoutUser = () => {
+    dispatch({ type: LOGOUT_USER });
+    removeUserFromLocalStorage();
+  };
+
+  const toggleSidebar = () => {
+    dispatch({ type: TOGGLE_SIDEBAR });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -114,6 +127,8 @@ const AppProvider = ({ children }) => {
         displayAlert,
         registerUser,
         loginUser,
+        logoutUser,
+        toggleSidebar,
       }}
     >
       {children}
