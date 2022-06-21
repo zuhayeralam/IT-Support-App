@@ -10,7 +10,9 @@ import errorHandlerMiddleware from './middleware/error-handler.js';
 
 const app = express();
 dotenv.config();
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== 'production') {
+  app.use(logger('dev'));
+}
 app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Welcome!');
