@@ -12,9 +12,15 @@ const createIssue = async (req, res) => {
   const issue = await Issue.create(req.body);
   res.status(StatusCodes.CREATED).json({ issue });
 };
+
 const getAllIssues = async (req, res) => {
-  res.send('getAllIssues user');
+  const issues = await Issue.find({ createdBy: req.user.userId });
+
+  res
+    .status(StatusCodes.OK)
+    .json({ issues, totalIssues: issues.length, numOfPages: 1 });
 };
+
 const updateIssue = async (req, res) => {
   res.send('update user');
 };
