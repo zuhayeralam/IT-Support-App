@@ -12,6 +12,12 @@ import {
   LOGOUT_USER,
 } from '../constants/loginConstants';
 
+import {
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAIL,
+} from '../constants/userProfileConstants';
+
 import { TOGGLE_SIDEBAR } from '../constants/sidebarConstants';
 import { initialState } from './appContext';
 
@@ -105,6 +111,34 @@ const reducer = (state, action) => {
 
   if (action.type === TOGGLE_SIDEBAR) {
     return { ...state, showSidebar: !state.showSidebar };
+  }
+
+  if (action.type === UPDATE_USER_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === UPDATE_USER_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      token: action.payload.token,
+      user: action.payload.user,
+      userLocation: action.payload.location,
+      issueLocation: action.payload.location,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'User Profile Updated!',
+    };
+  }
+
+  if (action.type === UPDATE_USER_FAIL) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    };
   }
 
   throw new Error(`no such action :${action.type}`);
