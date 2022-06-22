@@ -19,6 +19,13 @@ import {
 } from '../constants/userProfileConstants';
 
 import { TOGGLE_SIDEBAR } from '../constants/sidebarConstants';
+import { HANDLE_CHANGE, CLEAR_VALUES } from '../constants/stateChangeConstants';
+import {
+  CREATE_ISSUE_FAIL,
+  CREATE_ISSUE_REQUEST,
+  CREATE_ISSUE_SUCCESS,
+} from '../constants/addIssueConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -132,6 +139,54 @@ const reducer = (state, action) => {
   }
 
   if (action.type === UPDATE_USER_FAIL) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === HANDLE_CHANGE) {
+    return {
+      ...state,
+      page: 1,
+      [action.payload.name]: action.payload.value,
+    };
+  }
+  if (action.type === CLEAR_VALUES) {
+    const initialState = {
+      isEditing: false,
+      editIssueId: '',
+      description: '',
+      department: '',
+      issueLocation: state.userLocation,
+      issueType: 'hardware',
+      status: 'pending',
+    };
+
+    return {
+      ...state,
+      ...initialState,
+    };
+  }
+
+  if (action.type === CREATE_ISSUE_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === CREATE_ISSUE_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'New Issue Created!',
+    };
+  }
+
+  if (action.type === CREATE_ISSUE_FAIL) {
     return {
       ...state,
       isLoading: false,

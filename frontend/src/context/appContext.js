@@ -23,6 +23,12 @@ import {
 
 import { TOGGLE_SIDEBAR } from '../constants/sidebarConstants';
 import { LOGOUT_USER } from '../constants/loginConstants';
+import { HANDLE_CHANGE, CLEAR_VALUES } from '../constants/stateChangeConstants';
+import {
+  CREATE_ISSUE_FAIL,
+  CREATE_ISSUE_REQUEST,
+  CREATE_ISSUE_SUCCESS,
+} from '../constants/addIssueConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -38,6 +44,19 @@ export const initialState = {
   userLocation: userLocation || '',
   issueLocation: userLocation || '',
   showSidebar: false,
+  isEditing: false,
+  editIssueId: '',
+  description: '',
+  department: '',
+  issueTypeOptions: [
+    'hardware',
+    'external-device',
+    'software',
+    'configuration',
+  ],
+  issueType: 'hardware',
+  statusOptions: ['processing', 'declined', 'pending'],
+  status: 'pending',
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -178,6 +197,39 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
+
+  const handleChange = ({ name, value }) => {
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value } });
+  };
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES });
+  };
+
+  const createIssue = async () => {
+    dispatch({ type: CREATE_ISSUE_REQUEST });
+    try {
+      const { description, department, issueLocation, issueType, status } =
+        state;
+      await authFetch.post('/issues', {
+        description,
+        department,
+        issueLocation,
+        issueType,
+        status,
+      });
+      dispatch({ type: CREATE_ISSUE_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: CREATE_ISSUE_FAIL,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -188,6 +240,9 @@ const AppProvider = ({ children }) => {
         logoutUser,
         toggleSidebar,
         updateUser,
+        handleChange,
+        clearValues,
+        createIssue,
       }}
     >
       {children}
