@@ -7,6 +7,7 @@ import authRouter from './routes/authRoutes.js';
 import issuesRouter from './routes/issueRoutes.js';
 import notFound from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
+import authenticateUser from './middleware/authenticateUser.js';
 
 const app = express();
 dotenv.config();
@@ -22,7 +23,7 @@ app.get('/api/v1/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/issues', issuesRouter);
+app.use('/api/v1/issues', authenticateUser, issuesRouter);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
