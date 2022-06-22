@@ -29,6 +29,10 @@ import {
   CREATE_ISSUE_REQUEST,
   CREATE_ISSUE_SUCCESS,
 } from '../constants/addIssueConstants';
+import {
+  GET_ISSUES_REQUEST,
+  GET_ISSUES_SUCCESS,
+} from '../constants/getIssueConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -57,6 +61,10 @@ export const initialState = {
   issueType: 'hardware',
   statusOptions: ['processing', 'declined', 'pending'],
   status: 'pending',
+  issues: [],
+  totalIssues: 0,
+  numOfPages: 1,
+  page: 1,
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -230,6 +238,36 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const getIssues = async () => {
+    let url = `/issues`;
+
+    dispatch({ type: GET_ISSUES_REQUEST });
+    try {
+      const { data } = await authFetch(url);
+      const { issues, totalIssues, numOfPages } = data;
+      dispatch({
+        type: GET_ISSUES_SUCCESS,
+        payload: {
+          issues,
+          totalIssues,
+          numOfPages,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+      logoutUser();
+    }
+    clearAlert();
+  };
+
+  const setEditIssue = (id) => {
+    console.log(`set edit issue : ${id}`);
+  };
+
+  const deleteIssue = (id) => {
+    console.log(`delete : ${id}`);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -243,6 +281,9 @@ const AppProvider = ({ children }) => {
         handleChange,
         clearValues,
         createIssue,
+        getIssues,
+        setEditIssue,
+        deleteIssue,
       }}
     >
       {children}

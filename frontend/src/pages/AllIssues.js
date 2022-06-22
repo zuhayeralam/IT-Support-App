@@ -1,7 +1,12 @@
-import React from 'react';
+import { IssuesContainer, SearchContainer } from '../components';
 
 const AllIssues = () => {
-  return <div>AllIssues</div>;
+  return (
+    <>
+      <SearchContainer />
+      <IssuesContainer />
+    </>
+  );
 };
 
 export default AllIssues;

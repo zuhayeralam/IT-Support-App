@@ -26,6 +26,11 @@ import {
   CREATE_ISSUE_SUCCESS,
 } from '../constants/addIssueConstants';
 
+import {
+  GET_ISSUES_REQUEST,
+  GET_ISSUES_SUCCESS,
+} from '../constants/getIssueConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -193,6 +198,20 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: 'danger',
       alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === GET_ISSUES_REQUEST) {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+
+  if (action.type === GET_ISSUES_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      issues: action.payload.issues,
+      totalIssues: action.payload.totalIssues,
+      numOfPages: action.payload.numOfPages,
     };
   }
 
