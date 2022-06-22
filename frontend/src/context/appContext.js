@@ -33,6 +33,12 @@ import {
   GET_ISSUES_REQUEST,
   GET_ISSUES_SUCCESS,
 } from '../constants/getIssueConstants';
+import {
+  SET_EDIT_ISSUE,
+  EDIT_ISSUE_REQUEST,
+  EDIT_ISSUE_SUCCESS,
+  EDIT_ISSUE_FAIL,
+} from '../constants/editIssueConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -261,7 +267,32 @@ const AppProvider = ({ children }) => {
   };
 
   const setEditIssue = (id) => {
-    console.log(`set edit issue : ${id}`);
+    dispatch({ type: SET_EDIT_ISSUE, payload: { id } });
+  };
+
+  const editIssue = async () => {
+    dispatch({ type: EDIT_ISSUE_REQUEST });
+
+    try {
+      const { description, department, issueLocation, issueType, status } =
+        state;
+      await authFetch.patch(`/issues/${state.editIssueId}`, {
+        department,
+        description,
+        issueLocation,
+        issueType,
+        status,
+      });
+      dispatch({ type: EDIT_ISSUE_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_ISSUE_FAIL,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
   };
 
   const deleteIssue = (id) => {
@@ -284,6 +315,7 @@ const AppProvider = ({ children }) => {
         getIssues,
         setEditIssue,
         deleteIssue,
+        editIssue,
       }}
     >
       {children}

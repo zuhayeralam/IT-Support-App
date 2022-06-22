@@ -31,6 +31,13 @@ import {
   GET_ISSUES_SUCCESS,
 } from '../constants/getIssueConstants';
 
+import {
+  SET_EDIT_ISSUE,
+  EDIT_ISSUE_REQUEST,
+  EDIT_ISSUE_SUCCESS,
+  EDIT_ISSUE_FAIL,
+} from '../constants/editIssueConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -212,6 +219,44 @@ const reducer = (state, action) => {
       issues: action.payload.issues,
       totalIssues: action.payload.totalIssues,
       numOfPages: action.payload.numOfPages,
+    };
+  }
+
+  if (action.type === SET_EDIT_ISSUE) {
+    const issue = state.issues.find((issue) => issue._id === action.payload.id);
+    const { _id, description, department, issueLocation, issueType, status } =
+      issue;
+    return {
+      ...state,
+      isEditing: true,
+      editIssueId: _id,
+      description,
+      department,
+      issueLocation,
+      issueType,
+      status,
+    };
+  }
+
+  if (action.type === EDIT_ISSUE_REQUEST) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === EDIT_ISSUE_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'Issue Updated!',
+    };
+  }
+  if (action.type === EDIT_ISSUE_FAIL) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
     };
   }
 
