@@ -40,6 +40,8 @@ import {
   EDIT_ISSUE_FAIL,
 } from '../constants/editIssueConstants';
 
+import { DELETE_ISSUE_REQUEST } from '../constants/deleteIssueConstants';
+
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
 const userLocation = localStorage.getItem('location');
@@ -295,8 +297,14 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-  const deleteIssue = (id) => {
-    console.log(`delete : ${id}`);
+  const deleteIssue = async (issueId) => {
+    dispatch({ type: DELETE_ISSUE_REQUEST });
+    try {
+      await authFetch.delete(`/issues/${issueId}`);
+      getIssues();
+    } catch (error) {
+      logoutUser();
+    }
   };
 
   return (

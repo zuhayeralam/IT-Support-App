@@ -38,6 +38,8 @@ import {
   EDIT_ISSUE_FAIL,
 } from '../constants/editIssueConstants';
 
+import { DELETE_ISSUE_REQUEST } from '../constants/deleteIssueConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -258,6 +260,9 @@ const reducer = (state, action) => {
       alertType: 'danger',
       alertText: action.payload.msg,
     };
+  }
+  if (action.type === DELETE_ISSUE_REQUEST) {
+    return { ...state, isLoading: true };
   }
 
   throw new Error(`no such action :${action.type}`);
