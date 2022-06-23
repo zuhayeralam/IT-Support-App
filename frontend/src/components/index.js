@@ -10,6 +10,7 @@ import IssuesContainer from './IssuesContainer';
 import StatsContainer from './StatsContainer';
 import StatsItem from './StatItem';
 import Loading from './Loading';
+import ChartsContainer from './ChartsContainer';
 
 export {
   FormRowSelect,
@@ -24,4 +25,5 @@ export {
   StatsItem,
   StatsContainer,
   Loading,
+  ChartsContainer,
 };

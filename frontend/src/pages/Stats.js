@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppContext } from '../context/appContext';
-import { StatsContainer, Loading } from '../components';
+import { StatsContainer, Loading, ChartsContainer } from '../components';
 
 const Stats = () => {
   const { showStats, isLoading, monthlyIssues } = useAppContext();
@@ -15,7 +15,7 @@ const Stats = () => {
   return (
     <>
       <StatsContainer />
-      {/* ChartsContainer goes here */}
+      <ChartsContainer />
     </>
   );
 };
