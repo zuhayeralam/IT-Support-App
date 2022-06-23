@@ -40,6 +40,11 @@ import {
 
 import { DELETE_ISSUE_REQUEST } from '../constants/deleteIssueConstants';
 
+import {
+  SHOW_STATS_REQUEST,
+  SHOW_STATS_SUCCESS,
+} from '../constants/statsConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -263,6 +268,19 @@ const reducer = (state, action) => {
   }
   if (action.type === DELETE_ISSUE_REQUEST) {
     return { ...state, isLoading: true };
+  }
+
+  if (action.type === SHOW_STATS_REQUEST) {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+
+  if (action.type === SHOW_STATS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      stats: action.payload.stats,
+      monthlyIssues: action.payload.monthlyIssues,
+    };
   }
 
   throw new Error(`no such action :${action.type}`);

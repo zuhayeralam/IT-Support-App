@@ -41,6 +41,10 @@ import {
 } from '../constants/editIssueConstants';
 
 import { DELETE_ISSUE_REQUEST } from '../constants/deleteIssueConstants';
+import {
+  SHOW_STATS_REQUEST,
+  SHOW_STATS_SUCCESS,
+} from '../constants/statsConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -73,6 +77,8 @@ export const initialState = {
   totalIssues: 0,
   numOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyApplications: [],
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -307,6 +313,24 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_REQUEST });
+    try {
+      const { data } = await authFetch('/issues/stats');
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyIssues: data.monthlyIssues,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+      //logoutUser()
+    }
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -324,6 +348,7 @@ const AppProvider = ({ children }) => {
         setEditIssue,
         deleteIssue,
         editIssue,
+        showStats,
       }}
     >
       {children}
