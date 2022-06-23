@@ -45,6 +45,7 @@ import {
   SHOW_STATS_REQUEST,
   SHOW_STATS_SUCCESS,
 } from '../constants/statsConstants';
+import { CLEAR_FILTERS } from '../constants/searchConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -79,6 +80,11 @@ export const initialState = {
   page: 1,
   stats: {},
   monthlyApplications: [],
+  search: '',
+  searchStatus: 'all',
+  searchType: 'all',
+  sort: 'latest',
+  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -253,7 +259,11 @@ const AppProvider = ({ children }) => {
   };
 
   const getIssues = async () => {
-    let url = `/issues`;
+    const { search, searchStatus, searchType, sort } = state;
+    let url = `/issues?status=${searchStatus}&issueType=${searchType}&sort=${sort}`;
+    if (search) {
+      url = url + `&search=${search}`;
+    }
 
     dispatch({ type: GET_ISSUES_REQUEST });
     try {
@@ -331,6 +341,10 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -349,6 +363,7 @@ const AppProvider = ({ children }) => {
         deleteIssue,
         editIssue,
         showStats,
+        clearFilters,
       }}
     >
       {children}

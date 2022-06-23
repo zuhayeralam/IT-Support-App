@@ -5,10 +5,20 @@ import Issue from './Issue';
 import styled from 'styled-components';
 
 const IssuesContainer = () => {
-  const { getIssues, issues, isLoading, page, totalIssues } = useAppContext();
+  const {
+    getIssues,
+    issues,
+    isLoading,
+    page,
+    totalIssues,
+    search,
+    searchStatus,
+    searchType,
+    sort,
+  } = useAppContext();
   useEffect(() => {
     getIssues();
-  }, []);
+  }, [search, searchStatus, searchType, sort]);
 
   if (isLoading) {
     return <Loading center />;

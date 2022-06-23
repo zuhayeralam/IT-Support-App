@@ -17,7 +17,38 @@ const createIssue = async (req, res) => {
 };
 
 const getAllIssues = async (req, res) => {
-  const issues = await Issue.find({ createdBy: req.user.userId });
+  const { search, status, issueType, sort } = req.query;
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+
+  if (status !== 'all') {
+    queryObject.status = status;
+  }
+  if (issueType !== 'all') {
+    queryObject.issueType = issueType;
+  }
+  if (search) {
+    queryObject.position = { $regex: search, $options: 'i' };
+  }
+  // NO AWAIT
+  let result = Issue.find(queryObject);
+
+  // chain sort conditions
+  if (sort === 'latest') {
+    result = result.sort('-createdAt');
+  }
+  if (sort === 'oldest') {
+    result = result.sort('createdAt');
+  }
+  if (sort === 'a-z') {
+    result = result.sort('position');
+  }
+  if (sort === 'z-a') {
+    result = result.sort('-position');
+  }
+  const issues = await result;
 
   res
     .status(StatusCodes.OK)

@@ -45,6 +45,8 @@ import {
   SHOW_STATS_SUCCESS,
 } from '../constants/statsConstants';
 
+import { CLEAR_FILTERS } from '../constants/searchConstants';
+
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -280,6 +282,16 @@ const reducer = (state, action) => {
       isLoading: false,
       stats: action.payload.stats,
       monthlyIssues: action.payload.monthlyIssues,
+    };
+  }
+
+  if (action.type === CLEAR_FILTERS) {
+    return {
+      ...state,
+      search: '',
+      searchStatus: 'all',
+      searchType: 'all',
+      sort: 'latest',
     };
   }
 
