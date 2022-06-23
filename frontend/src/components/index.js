@@ -7,6 +7,9 @@ import BigSidebar from './BigSidebar';
 import FormRowSelect from './FormRowSelect';
 import SearchContainer from './SearchContainer';
 import IssuesContainer from './IssuesContainer';
+import StatsContainer from './StatsContainer';
+import StatsItem from './StatItem';
+import Loading from './Loading';
 
 export {
   FormRowSelect,
@@ -18,4 +21,7 @@ export {
   Navbar,
   SearchContainer,
   IssuesContainer,
+  StatsItem,
+  StatsContainer,
+  Loading,
 };
