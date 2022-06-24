@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Loading from './Loading';
 import Issue from './Issue';
 import styled from 'styled-components';
-
+import PageBtnContainer from './PageBtnContainer';
 const IssuesContainer = () => {
   const {
     getIssues,
@@ -15,10 +15,12 @@ const IssuesContainer = () => {
     searchStatus,
     searchType,
     sort,
+    numOfPages,
   } = useAppContext();
   useEffect(() => {
     getIssues();
-  }, [search, searchStatus, searchType, sort]);
+    // eslint-disable-next-line
+  }, [page, search, searchStatus, searchType, sort]);
 
   if (isLoading) {
     return <Loading center />;
@@ -40,6 +42,7 @@ const IssuesContainer = () => {
           return <Issue key={issue._id} {...issue} />;
         })}
       </div>
+      {numOfPages > 1 && <PageBtnContainer />}
     </Wrapper>
   );
 };

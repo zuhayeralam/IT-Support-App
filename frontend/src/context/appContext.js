@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext } from 'react';
+import React, { useReducer, useContext } from 'react';
 import reducer from './reducer';
 import axios from 'axios';
 
@@ -46,6 +46,7 @@ import {
   SHOW_STATS_SUCCESS,
 } from '../constants/statsConstants';
 import { CLEAR_FILTERS } from '../constants/searchConstants';
+import { CHANGE_PAGE } from '../constants/paginationConstants';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
@@ -259,8 +260,8 @@ const AppProvider = ({ children }) => {
   };
 
   const getIssues = async () => {
-    const { search, searchStatus, searchType, sort } = state;
-    let url = `/issues?status=${searchStatus}&issueType=${searchType}&sort=${sort}`;
+    const { page, search, searchStatus, searchType, sort } = state;
+    let url = `/issues?page=${page}&status=${searchStatus}&issueType=${searchType}&sort=${sort}`;
     if (search) {
       url = url + `&search=${search}`;
     }
@@ -278,7 +279,7 @@ const AppProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error.response);
+      //console.log(error.response);
       logoutUser();
     }
     clearAlert();
@@ -335,14 +336,18 @@ const AppProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error.response);
-      //logoutUser()
+      //console.log(error.response);
+      logoutUser();
     }
     clearAlert();
   };
 
   const clearFilters = () => {
     dispatch({ type: CLEAR_FILTERS });
+  };
+
+  const changePage = (page) => {
+    dispatch({ type: CHANGE_PAGE, payload: { page } });
   };
 
   return (
@@ -364,6 +369,7 @@ const AppProvider = ({ children }) => {
         editIssue,
         showStats,
         clearFilters,
+        changePage,
       }}
     >
       {children}

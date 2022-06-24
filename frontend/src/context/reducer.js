@@ -48,6 +48,7 @@ import {
 import { CLEAR_FILTERS } from '../constants/searchConstants';
 
 import { initialState } from './appContext';
+import { CHANGE_PAGE } from '../constants/paginationConstants';
 
 const reducer = (state, action) => {
   if (action.type === DISPLAY_ALERT) {
@@ -293,6 +294,10 @@ const reducer = (state, action) => {
       searchType: 'all',
       sort: 'latest',
     };
+  }
+
+  if (action.type === CHANGE_PAGE) {
+    return { ...state, page: action.payload.page };
   }
 
   throw new Error(`no such action :${action.type}`);
