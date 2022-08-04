@@ -2,6 +2,12 @@ import express from 'express';
 import logger from 'morgan';
 import dotenv from 'dotenv';
 import 'express-async-errors';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
 import connectDB from './db/connect.js';
 import authRouter from './routes/authRoutes.js';
 import issuesRouter from './routes/issueRoutes.js';
@@ -14,16 +20,21 @@ dotenv.config();
 if (process.env.NODE_ENV !== 'production') {
   app.use(logger('dev'));
 }
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// only when ready to deploy
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+
 app.use(express.json());
-app.get('/', (req, res) => {
-  res.send('Welcome!');
-});
-app.get('/api/v1/', (req, res) => {
-  res.send('Welcome!');
-});
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/issues', authenticateUser, issuesRouter);
+// only when ready to deploy
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+});
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
