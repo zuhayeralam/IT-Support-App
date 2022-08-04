@@ -19,10 +19,8 @@ function Landing() {
             </h1>
 
             <p>
-              I'm baby viral enamel pin chartreuse cliche retro af selfies
-              kinfolk photo booth plaid jianbing actually squid 3 wolf moon
-              lumbersexual. Hell of humblebrag gluten-free lo-fi man braid
-              leggings.
+              IT issue/ticketing app. Add issues and update status. View
+              statistics of issues.
             </p>
 
             <Link to='/register' className='btn btn-hero'>

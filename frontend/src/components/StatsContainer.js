@@ -1,6 +1,6 @@
 import { useAppContext } from '../context/appContext';
 import StatItem from './StatItem';
-import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from 'react-icons/fa';
+import { FaSpinner, FaCog, FaBug } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const StatsContainer = () => {
@@ -10,15 +10,15 @@ const StatsContainer = () => {
     {
       title: 'pending issues',
       count: stats.pending || 0,
-      icon: <FaSuitcaseRolling />,
+      icon: <FaSpinner />,
       color: '#e9b949',
       bcg: '#fcefc7',
     },
     {
       title: 'In Process',
       count: stats.processing || 0,
-      icon: <FaCalendarCheck />,
-      color: '#647acb',
+      icon: <FaCog />,
+      color: '#16b369',
       bcg: '#e0e8f9',
     },
     {
